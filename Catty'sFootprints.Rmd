@@ -1,0 +1,56 @@
+---
+title: "Catty'sFootprints"
+author: "Shaoqing Ying"
+date: "7 Juni 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+```
+
+## 07. June 2018
+
+
+```{r warning=F, message=F}
+require(leaflet)
+require(dplyr)
+
+
+setwd("~/Notes/Coursera Slides/9. Developing Data Products")
+restaurants <- read.csv2("restaurant.csv")
+cafe <- read.csv2("cafe.csv")
+
+catpawIcon <- makeIcon(
+  iconUrl = "catpaw.png",
+  iconWidth = 25, iconHeight = 25,
+  iconAnchorX = 22, iconAnchorY = 30,
+  shadowUrl = "catpaw2.png",
+  shadowWidth = 25, shadowHeight = 25,
+  shadowAnchorX = 21, shadowAnchorY = 29
+)
+
+catpawIcon2 <- makeIcon(
+  iconUrl = "catpaw2.png",
+  iconWidth = 25, iconHeight = 25,
+  iconAnchorX = 22, iconAnchorY = 30,
+  shadowUrl = "catpaw.png",
+  shadowWidth = 25, shadowHeight = 25,
+  shadowAnchorX = 21, shadowAnchorY = 29
+)
+
+
+leaflet() %>% 
+  addTiles(group = "Open Street Map") %>%
+  addMarkers(data =restaurants, lng = restaurants$lon, lat = restaurants$lat, popup = as.character(restaurants$Restaurant), 
+             icon = catpawIcon, clusterOptions = markerClusterOptions(), group = "Restaurant") %>%
+  addMarkers(data =cafe, lng = cafe$lon, lat =  cafe$lat, popup = as.character( cafe$Restaurant), 
+             icon = catpawIcon2, clusterOptions = markerClusterOptions(), group = "Cafe") %>%
+  addLegend(labels = c("Restaurant", "Cafe"), color = c("Black", "Pink")) %>%
+  addLayersControl(
+    baseGroups = c("Open Street Map"),
+    overlayGroups = c("Restaurant", "Cafe"),
+    options = layersControlOptions(collapsed = FALSE)
+  )
+```
+
